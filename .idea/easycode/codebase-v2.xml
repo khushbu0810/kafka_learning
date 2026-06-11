@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/ProductsMicroservice/src/main/java/com/example/ProductsMicroservice/config/KafkaConfig.java;C:/projects/kafka_learning/ProductsMicroservice/src/main/java/com/example/ProductsMicroservice/ProductsMicroserviceApplication.java;C:/projects/kafka_learning/ProductsMicroservice/src/test/java/com/example/ProductsMicroservice/ProductsMicroserviceApplicationTests.java" />
+  </component>
+</project>
