@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getTitle(),
                 product.getPrice(),
                 product.getQuantity());
-        //for publishing thi event to kafka topic we use kafka Client : KafkaTemplate
+        //for publishing this event to kafka topic we use kafka Client : KafkaTemplate
         //topic , key , event
 
         /*
