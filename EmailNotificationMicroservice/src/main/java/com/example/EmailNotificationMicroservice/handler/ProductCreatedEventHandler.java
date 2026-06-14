@@ -1,5 +1,6 @@
 package com.example.EmailNotificationMicroservice.handler;
 
+import com.example.core.event.ProductCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;

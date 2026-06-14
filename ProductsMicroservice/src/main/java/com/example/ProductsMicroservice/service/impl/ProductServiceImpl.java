@@ -2,8 +2,8 @@ package com.example.ProductsMicroservice.service.impl;
 
 import com.example.ProductsMicroservice.model.Product;
 import com.example.ProductsMicroservice.repository.ProductRepo;
-import com.example.ProductsMicroservice.service.ProductCreatedEvent;
 import com.example.ProductsMicroservice.service.ProductService;
+import com.example.core.event.ProductCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ProductServiceImpl implements ProductService {
     ProductRepo productRepo;
-    KafkaTemplate<String, ProductCreatedEvent> kafkaTemplate;
+    KafkaTemplate<String,ProductCreatedEvent> kafkaTemplate;
     private final Logger log= LoggerFactory.getLogger(this.getClass());
 
     @Autowired
