@@ -1,16 +1,20 @@
 package com.example.EmailNotificationMicroservice.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,9 +58,29 @@ it give error for the wrong message and if good message comes it consumes it ..
 
 
     //kafka listener container is responsible for receiving messages from kafka topic and invoking the handler method
-    ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory(ConsumerFactory<String,Object> consumerFactory){
+    @Bean
+    ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory(ConsumerFactory<String,Object> consumerFactory,KafkaTemplate<String,Object> kafkaTemplate){
+
+        //DeadLetterPublishingRecoverer -> used to send failed messages to dead letter topic  ---> receives kafkaTemplate as argument
+        DefaultErrorHandler errorHandler=new DefaultErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate)); //used to handle exceptions that occur during message consumption by kafka listener
+
         ConcurrentKafkaListenerContainerFactory<String,Object> factory=new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
+        factory.setCommonErrorHandler(errorHandler);
         return factory;
+    }
+
+    @Bean
+    KafkaTemplate<String,Object> kafkaTemplate(ProducerFactory<String,Object> producerFactory){
+        return new KafkaTemplate<>(producerFactory); //used to create kafka producer
+    }
+
+    @Bean
+    ProducerFactory<String,Object>producerFactory(){
+        Map<String,Object> conConfig=new HashMap<>();
+        conConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,environment.getProperty("spring.kafka.consumer.bootstrap-servers"));
+        conConfig.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        conConfig.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JacksonJsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(conConfig);
     }
 }
