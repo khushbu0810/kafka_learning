@@ -1,6 +1,6 @@
 package com.example.ProductsMicroservice.config;
 
-import com.example.ProductsMicroservice.service.ProductCreatedEvent;
+import com.example.core.event.ProductCreatedEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,11 +39,11 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     private String requestTimeout;
 
-    @Value("spring.kafka.producer.properties.enable.idempotence")
-    private String idempotence;
+//    @Value("spring.kafka.producer.properties.enable.idempotence")
+//    private String idempotence;
 
-    @Value("spring.kafka.producer.properties.max.in.flight.requests.per.connection")
-    private String inFlightRequests;
+//    @Value("spring.kafka.producer.properties.max.in.flight.requests.per.connection")
+//    private String inFlightRequests;
 
     //producer config
     Map<String,Object> producerConfigs(){
@@ -55,8 +55,8 @@ public class KafkaConfig {
         prodConfig.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG,deliveryTimeout);
         prodConfig.put(ProducerConfig.LINGER_MS_CONFIG,linger);
         prodConfig.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG,requestTimeout);
-        prodConfig.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,idempotence);
-        prodConfig.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,inFlightRequests);
+//        prodConfig.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,idempotence);
+//        prodConfig.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION,inFlightRequests);
 //        prodConfig.put(ProducerConfig.RETRIES_CONFIG,Integer.MAX_VALUE);
 
         return prodConfig;
