@@ -1,5 +1,6 @@
 package com.example.EmailNotificationMicroservice.config;
 
+import com.example.EmailNotificationMicroservice.exception.NotRetryableException;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -63,6 +64,7 @@ it give error for the wrong message and if good message comes it consumes it ..
 
         //DeadLetterPublishingRecoverer -> used to send failed messages to dead letter topic  ---> receives kafkaTemplate as argument
         DefaultErrorHandler errorHandler=new DefaultErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate)); //used to handle exceptions that occur during message consumption by kafka listener
+        errorHandler.addNotRetryableExceptions(NotRetryableException.class);
 
         ConcurrentKafkaListenerContainerFactory<String,Object> factory=new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);

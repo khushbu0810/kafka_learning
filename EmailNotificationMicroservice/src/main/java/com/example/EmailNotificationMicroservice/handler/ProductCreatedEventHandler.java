@@ -1,5 +1,6 @@
 package com.example.EmailNotificationMicroservice.handler;
 
+import com.example.EmailNotificationMicroservice.exception.NotRetryableException;
 import com.example.core.event.ProductCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -17,6 +18,9 @@ public class ProductCreatedEventHandler {
 
     @KafkaHandler
     public void handle(ProductCreatedEvent productCreatedEvent) {
+        if(true){
+            throw new NotRetryableException("An error took place. No need to consume this message again. Sending to Dead Letter Topic.");
+        }
         log.info("Received new event: "+ productCreatedEvent.getTitle());
 
     }
