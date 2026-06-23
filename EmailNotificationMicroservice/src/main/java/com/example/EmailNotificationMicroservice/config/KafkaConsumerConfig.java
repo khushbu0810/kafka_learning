@@ -1,6 +1,7 @@
 package com.example.EmailNotificationMicroservice.config;
 
 import com.example.EmailNotificationMicroservice.exception.NotRetryableException;
+import com.example.EmailNotificationMicroservice.exception.RetryableException;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,6 +17,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,8 +65,11 @@ it give error for the wrong message and if good message comes it consumes it ..
     ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory(ConsumerFactory<String,Object> consumerFactory,KafkaTemplate<String,Object> kafkaTemplate){
 
         //DeadLetterPublishingRecoverer -> used to send failed messages to dead letter topic  ---> receives kafkaTemplate as argument
-        DefaultErrorHandler errorHandler=new DefaultErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate)); //used to handle exceptions that occur during message consumption by kafka listener
+        //used to handle exceptions that occur during message consumption by kafka listener
+        DefaultErrorHandler errorHandler=new DefaultErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate),
+                new FixedBackOff(5000,3));
         errorHandler.addNotRetryableExceptions(NotRetryableException.class);
+        errorHandler.addRetryableExceptions(RetryableException.class);
 
         ConcurrentKafkaListenerContainerFactory<String,Object> factory=new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);

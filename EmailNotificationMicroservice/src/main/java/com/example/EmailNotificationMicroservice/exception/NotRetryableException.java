@@ -1,5 +1,4 @@
 package com.example.EmailNotificationMicroservice.exception;
-
 /*
 -> logic written in KafkaConsumerConfig -> DefaultErrorHandler
 -> exception occur when event takes place -> productCreatedEvent
