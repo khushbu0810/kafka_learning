@@ -39,7 +39,8 @@ public class ProductCreatedEventHandler {
         log.info("Received new event: " + productCreatedEvent.getTitle());
 
         //Configuring external microservice
-        String requestUrl = "http://localhost:8082";
+        //if ye service down hai then exception will be thrown
+        String requestUrl = "http://localhost:8082/response/200";
         try {
             ResponseEntity<String> response = restTemplate.exchange(requestUrl, HttpMethod.GET, null, String.class);
             if (response.getStatusCode().value() == HttpStatus.OK.value()) {
