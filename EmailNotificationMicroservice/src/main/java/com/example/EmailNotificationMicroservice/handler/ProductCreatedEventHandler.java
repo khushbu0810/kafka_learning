@@ -16,7 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @Slf4j
-@KafkaListener(topics = "product-created-events-topic")
+//@KafkaListener(topics = "product-created-events-topic",groupId = "product-created-events")
+@KafkaListener(topics = "product-created-events-topic",groupId = "product-created-events")
 /*
     this method should be invoked whenever a new message is received from specified kafka topic
     kafkaListener(topic1,topic2....)
@@ -36,7 +37,7 @@ public class ProductCreatedEventHandler {
             throw new NotRetryableException("An error took place. No need to consume this message again. Sending to Dead Letter Topic.");
         }
          */
-        log.info("Received new event: " + productCreatedEvent.getTitle());
+        log.info("Received new event: " + productCreatedEvent.getTitle()+" with productId: "+productCreatedEvent.getProductId());
 
         //Configuring external microservice
         //if ye service down hai then exception will be thrown
