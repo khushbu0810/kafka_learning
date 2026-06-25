@@ -4,6 +4,7 @@ import com.example.ProductsMicroservice.model.Product;
 import com.example.ProductsMicroservice.repository.ProductRepo;
 import com.example.ProductsMicroservice.service.ProductService;
 import com.example.core.event.ProductCreatedEvent;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +69,17 @@ public class ProductServiceImpl implements ProductService {
         // use get method on kafka send function, this get method throws Exception
 
         log.info("Before publishing event");
+
+        //Adding unique id to headers before sending message [using ProductRecord class]
+        ProducerRecord<String,ProductCreatedEvent> record=new ProducerRecord<>(
+                "product-created-events-topic", productId, productCreatedEvent);
+        record.headers().add("messageId",UUID.randomUUID().toString().getBytes());
+
         SendResult<String,ProductCreatedEvent> result =
-                kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
+                kafkaTemplate.send(record).get();
+
+//        SendResult<String,ProductCreatedEvent> result =
+//                kafkaTemplate.send("product-created-events-topic", productId, productCreatedEvent).get();
 
         log.info("Partition: "+result.getRecordMetadata().partition());
         log.info("Topic: "+result.getRecordMetadata().topic());
