@@ -9,7 +9,20 @@
         <option value="$PROJECT_DIR$/EmailNotificationMicroservice/pom.xml" />
         <option value="$PROJECT_DIR$/core/pom.xml" />
         <option value="$PROJECT_DIR$/mockService/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/WithdrawlMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/core/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/coreModule/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/TransferMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/DepositMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka/EmailNotificationMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka/mockService/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka/ProductsMicroservice/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/kafka_Transactions/core/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="corretto-22" project-jdk-type="JavaSDK">

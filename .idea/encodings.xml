@@ -2,9 +2,15 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/EmailNotificationMicroservice/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ProductsMicroservice/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/core/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/mockService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka/EmailNotificationMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka/ProductsMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka/mockService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_Transactions/DepositMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_Transactions/TransferMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_Transactions/WithdrawlMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_Transactions/core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_Transactions/coreModule/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springapp/src/main/java" charset="UTF-8" />
   </component>
 </project>
