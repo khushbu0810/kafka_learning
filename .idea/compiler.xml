@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mockService" />
+        <module name="mockMicroservice" />
       </profile>
       <profile name="Annotation profile for ProductsMicroservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -40,6 +41,7 @@
       <module name="core" options="-parameters" />
       <module name="core (1)" options="-parameters" />
       <module name="coreModule" options="-parameters" />
+      <module name="mockMicroservice" options="-parameters" />
       <module name="mockService" options="-parameters" />
       <module name="springapp" options="-parameters" />
     </option>

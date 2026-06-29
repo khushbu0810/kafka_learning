@@ -17,10 +17,10 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    @Value("withdraw-topic-name")
+    @Value("${withdraw-money-topic}")
     private String withdrawTopicName;
 
-    @Value("deposit-topic-name")
+    @Value("${deposit-money-topic}")
     private String depositTopicName;
 
     @Value("${spring.kafka.producer.bootstrap-servers}")
@@ -44,16 +44,15 @@ public class KafkaConfig {
     @Value("${spring.kafka.producer.properties.request.timeout.ms}")
     private String requestTimeout;
 
-    @Value("spring.kafka.producer.properties.enable.idempotence")
+    @Value("${spring.kafka.producer.properties.enable.idempotence}")
     private String idempotence;
 
-    @Value("spring.kafka.producer.properties.max.in.flight.requests.per.connection")
+    @Value("${spring.kafka.producer.properties.max.in.flight.requests.per.connection}")
     private String inFlightRequests;
 
-    @Value("spring.kafka.producer.transaction-id-prefix")
-    private String transactionIdPrefix;
+    @Value("${spring.kafka.producer.transaction-id-prefix}")
+    private String transactionIdPrefix; //assigning unique transaction ID to kafka producer
 
-    //producer config
     Map<String,Object> producerConfigs(){
         Map<String,Object> prodConfig=new HashMap<>();
         prodConfig.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,bootstrapServers);

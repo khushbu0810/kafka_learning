@@ -38,8 +38,8 @@ public class KafkaConsumerConfig {
         ConConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
         ConConfig.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS,JacksonJsonDeserializer.class);
         ConConfig.put(JacksonJsonDeserializer.TRUSTED_PACKAGES,environment.getProperty("spring.kafka.consumer.properties.spring.json.trusted.packages"));
-        ConConfig.put(ConsumerConfig.GROUP_ID_CONFIG,environment.getProperty("consumer.group-id"));
-        ConConfig.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,environment.getProperty("spring.kafka.consumer.isolation-level","READ_COMMITED").toLowerCase());
+        ConConfig.put(ConsumerConfig.GROUP_ID_CONFIG,environment.getProperty("spring.kafka.consumer.group-id"));
+        ConConfig.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG,environment.getProperty("spring.kafka.consumer.isolation-level","READ_COMMITTED").toLowerCase());
         return new DefaultKafkaConsumerFactory<>(ConConfig);
     }
 

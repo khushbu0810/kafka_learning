@@ -17,6 +17,7 @@
         <option value="$PROJECT_DIR$/kafka/EmailNotificationMicroservice/pom.xml" />
         <option value="$PROJECT_DIR$/kafka/mockService/pom.xml" />
         <option value="$PROJECT_DIR$/kafka/ProductsMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_Transactions/mockMicroservice/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
