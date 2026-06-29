@@ -1,15 +1,23 @@
 package com.example.ProductsMicroservice.service;
 
 import com.example.ProductsMicroservice.model.Product;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Objects;
 
 @DirtiesContext //code may be modified during execution of test (make sure each test will start with a clean slate)
 //helpful when test class contains more than one test methods (only one instance for this whole class will be created when test methods executes)
@@ -23,6 +31,12 @@ public class ProductServiceIntegrationTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafkaBroker;
+
+    @Autowired
+    private Environment environment;
 
     @Test
     void testCreateProduct_whenGivenValidProductDetails_successfulSendKafkaMessage() throws Exception {
@@ -43,5 +57,18 @@ public class ProductServiceIntegrationTest {
         productService.createProduct(product);
 
 
+    }
+
+    //this method return Map of configuration properties
+    private Map<String,Object> getConsumerProperties(){
+        return Map.of(
+                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,embeddedKafkaBroker.getBrokersAsString(),
+                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class,
+                ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JacksonJsonDeserializer.class,
+                ConsumerConfig.GROUP_ID_CONFIG, Objects.requireNonNull(environment.getProperty("spring.kafka.consumer.group-id")),
+                JacksonJsonDeserializer.TRUSTED_PACKAGES, Objects.requireNonNull(environment.getProperty("spring.kafka.consumer.properties.spring.json.trusted.packages")),
+                ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, Objects.requireNonNull(environment.getProperty("spring.kafka.consumer.auto-offset-reset"))
+        );
     }
 }
