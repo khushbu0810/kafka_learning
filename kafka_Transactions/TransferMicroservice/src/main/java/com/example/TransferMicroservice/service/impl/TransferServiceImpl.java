@@ -1,11 +1,14 @@
 package com.example.TransferMicroservice.service.impl;
 
 import com.example.TransferMicroservice.exception.TransferException;
+import com.example.TransferMicroservice.model.TransferEntity;
 import com.example.TransferMicroservice.model.TransferModel;
+import com.example.TransferMicroservice.repository.TransferRepo;
 import com.example.TransferMicroservice.service.TransferService;
 import com.example.coreModule.event.DepositRequestedEvent;
 import com.example.coreModule.event.WithdrawalRequestedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.ConnectException;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -23,6 +26,7 @@ public class TransferServiceImpl implements TransferService {
 
     private KafkaTemplate<String, Object> kafkaTemplate;
     private Environment environment;
+    private TransferRepo transferRepo;
     //    private RestTemplate restTemplate;
 //
 //    public TransferServiceImpl(KafkaTemplate<String, Object> kafkaTemplate, Environment environment, RestTemplate restTemplate) {
@@ -32,13 +36,15 @@ public class TransferServiceImpl implements TransferService {
 //    }
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public TransferServiceImpl(KafkaTemplate<String, Object> kafkaTemplate, Environment environment) {
+    public TransferServiceImpl(KafkaTemplate<String, Object> kafkaTemplate, Environment environment, TransferRepo transferRepo) {
         this.kafkaTemplate = kafkaTemplate;
         this.environment = environment;
+        this.transferRepo = transferRepo;
     }
 
     //    @Transactional(value="kafkaTransactionManager",rollbackFor = {TransferException.class, ConnectException.class})
-    @Transactional
+//    @Transactional("kafkaTransactionManager") , now we have db save logic in method so we need to use transactionManager
+    @Transactional("transactionManager")
     @Override
     public boolean transfer(TransferModel transferModel) {
         /*
@@ -48,7 +54,16 @@ public class TransferServiceImpl implements TransferService {
                 transferModel.getRecipientId(), transferModel.getAmount());
         DepositRequestedEvent depositEvent = new DepositRequestedEvent(transferModel.getSenderId(),
                 transferModel.getRecipientId(), transferModel.getAmount());
+
+        TransferEntity transferEntity = new TransferEntity();
+        //copying values from model to entity -> (src,dest)
+        BeanUtils.copyProperties(transferModel, transferEntity);
+        transferEntity.setTransferId(UUID.randomUUID().toString());
+
         try {
+            ///saving to database
+            transferRepo.save(transferEntity);
+
             kafkaTemplate.send(environment.getProperty("withdraw-money-topic", "withdraw-money-topic"),
                     withdrawalEvent);
             log.info("Sent event to withdrawal topic");
