@@ -29,6 +29,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DirtiesContext //code may be modified during execution of test (make sure each test will start with a clean slate)
 //helpful when test class contains more than one test methods (only one instance for this whole class will be created when test methods executes)
@@ -54,6 +58,12 @@ public class ProductServiceIntegrationTest {
 
     @BeforeAll
     void setUp() {
+        System.out.println("Active Profiles: " + String.join(", ", environment.getActiveProfiles()));
+
+        System.out.println("group-id = " + environment.getProperty("spring.kafka.consumer.group-id"));
+        System.out.println("trusted-packages = " + environment.getProperty("spring.kafka.consumer.properties.spring.json.trusted.packages"));
+        System.out.println("auto-offset-reset = " + environment.getProperty("spring.kafka.consumer.auto-offset-reset"));
+        System.out.println("topic = " + environment.getProperty("product-created-events-topic-name"));
         //create kafka consumers using config properties
         DefaultKafkaConsumerFactory<String, Object> consumerFactory = new DefaultKafkaConsumerFactory<>(getConsumerProperties());
 
@@ -85,7 +95,16 @@ public class ProductServiceIntegrationTest {
         //3. invoking method
         productService.createProduct(product);
 
-
+        //Assert
+        //if after 3 seconds record not available in queue then it will return null
+        ConsumerRecord<String, ProductCreatedEvent> message = records.poll(3000, TimeUnit.MILLISECONDS);
+        assertNotNull(message);
+        assertNotNull(message.key());
+        ProductCreatedEvent productCreatedEvent =message.value();
+        //for checking if original source object and object that was received from kafka topic have same value
+        assertEquals(product.getQuantity(),productCreatedEvent.getQuantity());
+        assertEquals(product.getTitle(),productCreatedEvent.getTitle());
+        assertEquals(product.getPrice(),productCreatedEvent.getPrice());
     }
 
     //this method return Map of configuration properties
