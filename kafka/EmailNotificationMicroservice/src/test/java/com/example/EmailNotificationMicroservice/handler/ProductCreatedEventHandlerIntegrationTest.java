@@ -64,7 +64,7 @@ public class ProductCreatedEventHandlerIntegrationTest {
                 messageKey,
                 productCreatedEvent);
 
-        record.headers().add("messageId", messageId.getBytes());
+        record.headers().add("uniqueMessageId", messageId.getBytes());
         record.headers().add(KafkaHeaders.RECEIVED_KEY, messageKey.getBytes());
 
         ProcessedEventEntity processedEventEntity = new ProcessedEventEntity();
