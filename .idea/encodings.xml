@@ -6,7 +6,10 @@
     <file url="file://$PROJECT_DIR$/kafka/ProductsMicroservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka/mockService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_SAGA/OrderMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_SAGA/PaymentMicroservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka_SAGA/ProductMicroservice/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/kafka_SAGA/core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka_Transactions/DepositMicroservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka_Transactions/TransferMicroservice/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/kafka_Transactions/WithdrawlMicroservice/src/main/java" charset="UTF-8" />

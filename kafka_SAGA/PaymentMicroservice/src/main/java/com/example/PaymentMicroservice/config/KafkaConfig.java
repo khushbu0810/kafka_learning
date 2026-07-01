@@ -1,4 +1,5 @@
-package com.example.ProductMicroservice.config;
+package com.example.PaymentMicroservice.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -8,7 +9,7 @@ import org.springframework.kafka.core.ProducerFactory;
 public class KafkaConfig {
 
     @Bean
-    KafkaTemplate<String,Object> kafkaTemplate(ProducerFactory<String,Object>producerFactory){
+    KafkaTemplate<String,Object> kafkaTemplate(ProducerFactory<String,Object> producerFactory){
         return new KafkaTemplate<>(producerFactory);
     }
 }

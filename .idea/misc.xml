@@ -19,6 +19,9 @@
         <option value="$PROJECT_DIR$/kafka/ProductsMicroservice/pom.xml" />
         <option value="$PROJECT_DIR$/kafka_Transactions/mockMicroservice/pom.xml" />
         <option value="$PROJECT_DIR$/kafka_SAGA/ProductMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_SAGA/OrderMicroservice/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_SAGA/core/pom.xml" />
+        <option value="$PROJECT_DIR$/kafka_SAGA/PaymentMicroservice/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
