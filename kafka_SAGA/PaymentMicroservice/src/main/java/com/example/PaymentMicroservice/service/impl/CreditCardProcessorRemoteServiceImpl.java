@@ -13,15 +13,14 @@ import java.math.BigInteger;
 
 @Service
 public class CreditCardProcessorRemoteServiceImpl implements CreditCardProcessorRemoteService {
-    private final RestTemplate restTemplate;
     private final String ccpRemoteServiceUrl;
+
+    private RestTemplate restTemplate=new RestTemplate();
 
 
     public CreditCardProcessorRemoteServiceImpl(
-            RestTemplate restTemplate,
             @Value("${remote.ccp.url}") String ccpRemoteServiceUrl
     ) {
-        this.restTemplate = restTemplate;
         this.ccpRemoteServiceUrl = ccpRemoteServiceUrl;
     }
 
