@@ -10,18 +10,7 @@
         <module name="mockService" />
         <module name="mockMicroservice" />
       </profile>
-      <profile name="Annotation profile for ProductsMicroservice" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
-        </processorPath>
-        <module name="ProductsMicroservice" />
-        <module name="EmailNotificationMicroservice" />
-      </profile>
-      <profile name="Annotation profile for ProductMicroservice" enabled="true">
+      <profile name="Annotation profile for PaymentMicroservice" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -30,9 +19,12 @@
         </processorPath>
         <module name="TransferMicroservice" />
         <module name="core" />
-        <module name="ProductMicroservice" />
+        <module name="EmailNotificationMicroservice" />
         <module name="coreModule" />
         <module name="DepositMicroservice" />
+        <module name="ProductMicroservice" />
+        <module name="CreditCardProcessorMicroservice" />
+        <module name="ProductsMicroservice" />
         <module name="WithdrawlMicroservice" />
         <module name="PaymentMicroservice" />
         <module name="OrderMicroservice" />
@@ -45,6 +37,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="CreditCardProcessorMicroservice" options="-parameters" />
       <module name="DepositMicroservice" options="-parameters" />
       <module name="EmailNotificationMicroservice" options="-parameters" />
       <module name="OrderMicroservice" options="-parameters" />
