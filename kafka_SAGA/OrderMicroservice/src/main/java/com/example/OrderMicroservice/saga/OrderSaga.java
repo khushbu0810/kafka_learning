@@ -4,6 +4,7 @@ import com.example.OrderMicroservice.service.OrderHistoryService;
 import com.example.core.commands.ApprovedOrderCommand;
 import com.example.core.commands.ProcessPaymentCommand;
 import com.example.core.commands.ReserveProductCommand;
+import com.example.core.events.OrderApprovedEvent;
 import com.example.core.events.OrderCreatedEvent;
 import com.example.core.events.PaymentProcessEvent;
 import com.example.core.events.ProductReservedEvent;
@@ -70,5 +71,10 @@ public class OrderSaga {
                 event.getOrderId()
         );
         kafkaTemplate.send(orderCommandsTopicName,command);
+    }
+
+    @KafkaHandler
+    public void handleEvent(@Payload OrderApprovedEvent event){
+        orderHistoryService.add(event.getOrderId(),OrderStatus.APPROVED);
     }
 }
