@@ -4,6 +4,7 @@ import com.example.ProductMicroservice.service.ProductService;
 import com.example.core.commands.ReserveProductCommand;
 import com.example.core.dto.Product;
 import com.example.core.events.ProductReservedEvent;
+import com.example.core.events.ProductReservedFailedEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -47,6 +48,13 @@ public class ProductCommandsHandler {
 
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
+            ProductReservedFailedEvent productReservedFailedEvent=new ProductReservedFailedEvent(
+                    command.getProductId(),
+                    command.getOrderId(),
+                    command.getProductQuantity()
+            );
+            //publish failed product reserve event
+            kafkaTemplate.send(productsEventsTopicName,productReservedFailedEvent);
         }
     }
 }
