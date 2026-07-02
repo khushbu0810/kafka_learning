@@ -4,12 +4,16 @@ import com.example.OrderMicroservice.model.OrderEntity;
 import com.example.OrderMicroservice.repository.OrderRepository;
 import com.example.OrderMicroservice.service.OrderService;
 import com.example.core.dto.Order;
+import com.example.core.events.OrderApprovedEvent;
 import com.example.core.events.OrderCreatedEvent;
 import com.example.core.types.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -54,5 +58,16 @@ public class OrderServiceImpl implements OrderService {
                 entity.getProductQuantity(),
                 entity.getStatus()
         );
+    }
+
+    @Override
+    public void approveOrder(UUID orderId) {
+        OrderEntity orderEntity=orderRepository.findById(orderId).orElse(null);
+        Assert.notNull(orderEntity,"No order found in db with this order id: "+ orderId);
+        orderEntity.setStatus(OrderStatus.APPROVED);
+        orderRepository.save(orderEntity);
+
+        OrderApprovedEvent orderApprovedEvent=new OrderApprovedEvent(orderId);
+        kafkaTemplate.send(ordersEventsTopicName,orderApprovedEvent);
     }
 }
