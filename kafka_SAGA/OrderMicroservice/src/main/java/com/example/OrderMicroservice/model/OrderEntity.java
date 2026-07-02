@@ -9,7 +9,6 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@Table(name = "orders")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
