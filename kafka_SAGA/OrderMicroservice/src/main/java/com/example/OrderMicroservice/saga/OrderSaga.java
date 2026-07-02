@@ -1,8 +1,10 @@
 package com.example.OrderMicroservice.saga;
 
 import com.example.OrderMicroservice.service.OrderHistoryService;
+import com.example.core.commands.ProcessPaymentCommand;
 import com.example.core.commands.ReserveProductCommand;
 import com.example.core.events.OrderCreatedEvent;
+import com.example.core.events.ProductReservedEvent;
 import com.example.core.types.OrderStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -12,16 +14,22 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(topics = {"${orders.events.topic.name}"})
+@KafkaListener(topics = {"${orders.events.topic.name}","${products.events.topic.name}"})
 public class OrderSaga {
 
     KafkaTemplate<String,Object>kafkaTemplate;
     private final String productsCommandsTopicName;
     private OrderHistoryService orderHistoryService;
+    private final String paymentsCommandsTopicName;
 
-    public OrderSaga(KafkaTemplate<String,Object> kafkaTemplate,@Value("${products.commands.topic.name}") String productsCommandsTopicName,OrderHistoryService orderHistoryService){
+    public OrderSaga(
+            KafkaTemplate<String,Object> kafkaTemplate,
+            @Value("${products.commands.topic.name}") String productsCommandsTopicName,
+            @Value("${payments.commands.topic.name}") String paymentsCommandsTopicName,
+            OrderHistoryService orderHistoryService){
         this.kafkaTemplate=kafkaTemplate;
         this.productsCommandsTopicName=productsCommandsTopicName;
+        this.paymentsCommandsTopicName=paymentsCommandsTopicName;
         this.orderHistoryService=orderHistoryService;
     }
 
@@ -37,6 +45,18 @@ public class OrderSaga {
                 event.getOrderId()
         );
         kafkaTemplate.send(productsCommandsTopicName,command);
+        orderHistoryService.add(event.getOrderId(), OrderStatus.CREATED);
+    }
+
+    @KafkaHandler
+    public void handleEvent(@Payload ProductReservedEvent event){
+        ProcessPaymentCommand command=new ProcessPaymentCommand(
+                event.getOrderId(),
+                event.getProductId(),
+                event.getProductPrice(),
+                event.getProductQuantity()
+        );
+        kafkaTemplate.send(paymentsCommandsTopicName,command);
         orderHistoryService.add(event.getOrderId(), OrderStatus.CREATED);
     }
 }
