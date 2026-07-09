@@ -2,12 +2,10 @@ package com.example.OrderMicroservice.saga;
 
 import com.example.OrderMicroservice.service.OrderHistoryService;
 import com.example.core.commands.ApprovedOrderCommand;
+import com.example.core.commands.CancelProductReservationCommand;
 import com.example.core.commands.ProcessPaymentCommand;
 import com.example.core.commands.ReserveProductCommand;
-import com.example.core.events.OrderApprovedEvent;
-import com.example.core.events.OrderCreatedEvent;
-import com.example.core.events.PaymentProcessEvent;
-import com.example.core.events.ProductReservedEvent;
+import com.example.core.events.*;
 import com.example.core.types.OrderStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -76,5 +74,15 @@ public class OrderSaga {
     @KafkaHandler
     public void handleEvent(@Payload OrderApprovedEvent event){
         orderHistoryService.add(event.getOrderId(),OrderStatus.APPROVED);
+    }
+
+    @KafkaHandler
+    public void handleEvent(@Payload PaymentProcessFailedEvent event){
+        CancelProductReservationCommand command=new CancelProductReservationCommand(
+                event.getProductId(),
+                event.getOrderId(),
+                event.getProductQuantity()
+        );
+        kafkaTemplate.send(productsCommandsTopicName,command);
     }
 }

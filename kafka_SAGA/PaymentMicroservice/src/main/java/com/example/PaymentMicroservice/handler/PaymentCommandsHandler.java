@@ -33,6 +33,7 @@ public class PaymentCommandsHandler {
 
     @KafkaHandler
     public void handleCommand(@Payload ProcessPaymentCommand command) {
+        System.out.println("Received ProcessPaymentCommand: " + command);
         try {
             Payment payment = new Payment(
                     command.getOrderId(),
@@ -50,6 +51,7 @@ public class PaymentCommandsHandler {
                     command.getProductId(),
                     command.getProductQuantity()
             );
+            //payment failed reverse the order that we store in stock --> compensating transaction --> update in order saga
             kafkaTemplate.send(paymentsEventsTopicName, paymentProcessFailedEvent);
         }
     }

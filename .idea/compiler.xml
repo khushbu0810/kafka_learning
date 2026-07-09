@@ -7,10 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="core (1)" />
         <module name="mockService" />
         <module name="mockMicroservice" />
       </profile>
-      <profile name="Annotation profile for OrderMicroservice" enabled="true">
+      <profile name="Annotation profile for coreModule" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -20,18 +21,17 @@
         <module name="TransferMicroservice" />
         <module name="core" />
         <module name="EmailNotificationMicroservice" />
+        <module name="coreModule" />
+        <module name="DepositMicroservice" />
         <module name="ProductMicroservice" />
         <module name="CreditCardProcessorMicroservice" />
         <module name="ProductsMicroservice" />
-        <module name="coreModule" />
-        <module name="DepositMicroservice" />
         <module name="WithdrawlMicroservice" />
-        <module name="OrderMicroservice" />
         <module name="PaymentMicroservice" />
+        <module name="OrderMicroservice" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="core (1)" target="21" />
       <module name="springapp" target="21" />
     </bytecodeTargetLevel>
   </component>
