@@ -1,6 +1,8 @@
 package com.example.ProductMicroservice.handler;
 
 import com.example.ProductMicroservice.service.ProductService;
+import com.example.core.commands.CancelProductReservationCommand;
+import com.example.core.commands.ProductReservationCancelledEvent;
 import com.example.core.commands.ReserveProductCommand;
 import com.example.core.dto.Product;
 import com.example.core.events.ProductReservedEvent;
@@ -44,17 +46,29 @@ public class ProductCommandsHandler {
                     command.getProductQuantity()
             );
             //publish this event
-            kafkaTemplate.send(productsEventsTopicName,productReservedEvent);
+            kafkaTemplate.send(productsEventsTopicName, productReservedEvent);
 
         } catch (Exception e) {
             log.error(e.getLocalizedMessage(), e);
-            ProductReservedFailedEvent productReservedFailedEvent=new ProductReservedFailedEvent(
+            ProductReservedFailedEvent productReservedFailedEvent = new ProductReservedFailedEvent(
                     command.getProductId(),
                     command.getOrderId(),
                     command.getProductQuantity()
             );
             //publish failed product reserve event
-            kafkaTemplate.send(productsEventsTopicName,productReservedFailedEvent);
+            kafkaTemplate.send(productsEventsTopicName, productReservedFailedEvent);
         }
+    }
+
+    @KafkaHandler
+    public void handleCommand(@Payload CancelProductReservationCommand command) {
+        Product productToCancel = new Product(command.getProductId(), command.getProductQuantity());
+        productService.cancelReservation(productToCancel, command.getOrderId());
+
+        ProductReservationCancelledEvent productReservationCancelledEvent=new ProductReservationCancelledEvent(
+                command.getProductId(),
+                command.getOrderId()
+        );
+        kafkaTemplate.send(productsEventsTopicName,productReservationCancelledEvent);
     }
 }
