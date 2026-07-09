@@ -70,4 +70,12 @@ public class OrderServiceImpl implements OrderService {
         OrderApprovedEvent orderApprovedEvent=new OrderApprovedEvent(orderId);
         kafkaTemplate.send(ordersEventsTopicName,orderApprovedEvent);
     }
+
+    @Override
+    public void rejectOrder(UUID orderId) {
+        OrderEntity orderEntity=orderRepository.findById(orderId).orElse(null);
+        Assert.notNull(orderEntity,"No order found in db with this order id: "+ orderId);
+        orderEntity.setStatus(OrderStatus.REJECTED);
+        orderRepository.save(orderEntity);
+    }
 }
